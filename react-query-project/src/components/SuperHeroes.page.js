@@ -10,7 +10,7 @@ export const SuperHeroesPage = () => {
       setData(res.data);
       setIsLoading(false);
     });
-  });
+  }, []);
 
   if (isLoading) {
     return <h2>Loading...</h2>;
