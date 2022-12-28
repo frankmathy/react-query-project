@@ -6,11 +6,24 @@ const fetchSuperHeroes = () => {
 };
 
 export const RQSuperHeroesPage = () => {
+  const onSuccess = (data) => {
+    console.log('Perform side effect after data fetching', data);
+  };
+
+  const onError = (data) => {
+    console.log('Perform side effect after encountering error', data);
+  };
+
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     'super-heroes',
     fetchSuperHeroes,
     {
-      enabled: false,
+      onSuccess: onSuccess,
+      onError: onError,
+      select: (data) => {
+        const superHeroNames = data.data.map((hero) => hero.name);
+        return superHeroNames;
+      },
     }
   );
 
@@ -28,8 +41,8 @@ export const RQSuperHeroesPage = () => {
     <>
       <h2>RQ Super Heroes Page</h2>
       <button onClick={refetch}>Fetch Heroes</button>
-      {data?.data.map((hero) => {
-        return <div key={hero.name}>{hero.name}</div>;
+      {data.map((heroName) => {
+        return <div key={heroName}>{heroName}</div>;
       })}
     </>
   );
